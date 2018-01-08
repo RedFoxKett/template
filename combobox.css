@@ -1,0 +1,38 @@
+.combobox-parent {
+	position: relative;
+
+	display: inline-block;
+}
+
+.combobox-parent input {
+	width: 100%;
+}
+
+.combobox-popup {
+	position: absolute;
+	z-index: 10;
+
+	max-height: 200px;
+	display: block;
+
+	overflow: auto;
+
+	border: 1px solid darkgray;
+	background-color: white;
+}
+
+.combobox-row {
+	padding: 0px 5px;
+	
+	white-space: nowrap;
+}
+
+.combobox-row:last-child {
+	padding-bottom: 5px;
+}
+
+.combobox-row:hover {
+	color: white;
+	background-color: blue;
+}
+

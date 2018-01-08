@@ -1,0 +1,284 @@
+html {
+	width: 100%;
+	height: 100%;
+
+	background-color: #e7f3e8;
+
+	overflow: auto;
+}
+
+body {
+	width: 70%;
+	max-width: 760px;
+	min-height: 100%;
+
+	margin: 0 auto;
+	padding: 40px 25px;
+
+	border: 1px solid #A0C6E3;
+	background-color: #e2edff;
+}
+
+/* Tabs */
+.tabdiv > ul {
+	line-height: 1.5em;
+	list-style-type: none;
+	margin: 0;
+	padding-left: 0px;
+	padding-bottom: 4px;
+}
+
+.tabdiv > ul a {
+	background-color: #e7f3e8;
+	border: 1px solid #A0C6E3;
+	margin-right: 0.5em;
+	padding: 2px 0.75em;
+	text-decoration: none;
+}
+
+.tabdiv > ul li {
+	display: inline;
+}
+
+.tabdiv > ul li.active a {
+	background-color: #A0C6E3;
+	border: 1px solid #A0C6E3;
+}
+
+.tabdiv > div {
+	border: 1px solid #A0C6E3;
+	background-color: #fefffc;
+
+	padding: 1em;
+	margin-top: -0.3em;
+
+	display: none;
+}
+
+.tabdiv > div.active-tab {
+	border: 1px solid #A0C6E3;
+	padding: 1em;
+	margin-top: -0.3em;
+
+	display: block;
+}
+
+/* ComboBox */
+.combobox-row {
+	display: flex;
+}
+
+.combobox-row > * {
+	flex: 1 1 auto;
+}
+
+.combobox-row > .help, .combobox-row > span > a {
+	flex: 0 0 auto;
+}
+
+/* General */
+.highlight::after {
+	content: "!!";
+
+	color: red;
+}
+
+.hidden {
+	display: none !important;
+}
+
+.hidden-rows {
+	min-height: 1em;
+}
+
+.hidden-text {
+	float: right;
+
+	margin: 2px 34px 0px 0px;
+
+	font-size: 10pt;
+}
+
+.output {
+	margin: 15px;
+}
+
+.output > label {
+	display: block;
+}
+
+.output > textarea {
+	width: 100%;
+	height: 300px;
+}
+
+.entry-section {
+	position: relative;
+
+	padding: 10px;
+	margin-top: 20px;
+
+	border: 1px dashed darkviolet;
+	border-radius: 15px;
+}
+
+.entry-section > h4 {
+	position: absolute;
+	top: -8px;
+	left: 20px;
+
+	margin: 0px;
+
+	font-size: 14px;
+	background-color: #fefffc;
+}
+
+.entry-row, .entry-row-wrapping {
+	display: flex;
+	align-items: center;
+
+	margin-top: 10px;
+}
+
+.entry-row { flex-wrap: nowrap; }
+.entry-row-wrapping { flex-wrap: wrap; }
+
+.entry-row > * {
+	flex: 1 1 auto;
+
+	margin: auto 0px auto 20px;
+}
+
+
+.no-margin {
+	margin: 0px;
+}
+
+.entry-row > label {
+	text-align: right;
+}
+
+.entry-row > :first-child, .entry-row-wrapping > :first-child {
+	flex: 0 0 auto;
+	
+	margin-left: 0px;
+
+	text-align: left;
+}
+
+.entry-row > .help, .entry-row-wrapping > .help {
+	flex: 0 0 auto;
+}
+
+.entry-row > input, .entry-row > textarea, .entry-row-wrapping .stretch {
+	flex-grow: 1;
+}
+
+.xml-input textarea {
+	height: 1em;
+}
+
+.checkbox-cluster > span {
+	display: inline-block;
+
+	padding: 2px;
+
+	border: 1px dotted darkviolet;
+}
+
+.help {
+	display: inline-block;
+	float: right;
+
+	width: 28px;
+	height: 28px;
+	min-width: 28px;
+	min-height: 28px;
+
+	font-size: 24px;
+	font-weight: bolder;
+	text-align: center;
+	border: 2px dashed #111;
+	border-radius: 2px;
+
+	overflow: hidden;
+}
+
+.combobox-row > .help {
+	width: 14px;
+	height: 14px;
+	min-width: 14px;
+	min-height: 14px;
+
+	font-size: 12px;
+}
+
+#tooltip {
+	z-index: 20;
+
+	display: inline-block;
+
+	max-width: 140px;
+	padding: 10px;
+
+	border: 1px solid #111;
+	border-radius: 3px;
+	background-color: white;
+}
+
+.action {
+	color: blue;
+	cursor: pointer;
+
+	border: 1px dashed blue;
+	text-align: center;
+}
+
+input[type="number"] {
+	width: 60px;
+}
+
+/* Weapons and Equips */
+#equip-category {
+	width: 100%;
+
+	margin-top: 3px;
+}
+
+.equip-repairs > span {
+	display: inline-block;
+
+	margin: 0px 0px 2px 20px;
+}
+
+.equip-repairs > span:first-childe {
+	margin-left: 0px;
+}
+
+.equip-dyeing input {
+	visibility: hidden;
+	position: absolute;
+}
+
+.equip-dyeing input + * {
+	cursor: pointer;
+	display: inline-block;
+
+	width: 36px;
+	height: 36px;
+	line-height: 36px;
+
+	padding: 2px;
+
+	border: 1px solid transparent;
+	text-align: center;
+	background-color: lightyellow;
+}
+
+.equip-dyeing input:checked + * {
+	border-color: red;
+}
+
+.equip-dyeing label {
+	text-align: center;
+}

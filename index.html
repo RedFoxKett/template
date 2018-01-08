@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mabinogi World Wiki Template Assistant</title>
+	<link rel="stylesheet" type="text/css" href="template.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="combobox.css">
+	<script type="text/javascript" src="combobox.js"></script>
+
+	<script type="text/javascript" src="wikiapi.js"></script>
+	<script type="text/javascript" src="template.js"></script>
+	<script type="text/javascript" src="styleequip.js"></script>
+</head>
+<body>
+	<div class="tabdiv">
+		<ul>
+			<li id="weapon-tab" class="active"><a href="#weapon">Weapon</a></li>
+			<li id="equip-tab" class="inactive"><a href="#equip">Equip</a></li>
+		</ul>
+		<div id="equip" class="active-tab tab-weapon tab-equip">
+			<div class="warning tab-hide tab-weapon">Please do not use this for life exploration tools.</div>
+			<div class="entry-row xml-input">
+				<label for="equip-xml">Paste here:</label>
+				<textarea id="equip-xml"></textarea>
+			</div>
+			<div class="entry-row">
+				<label for="equip-name">Name:</label>
+				<input id="equip-name" class="combobox" data-combo-search="searchWikiForEquip" data-combo-set="downloadEquipDataPage" />
+				<span class="help">Item name as shown in-game.</span>
+			</div>
+			<div class="hidden-rows">
+				<span id="equip-custom-page" class="hidden-text action">Custom page or icon name.</span>
+				<div class="entry-row">
+					<label for="equip-page">Page:</label>
+					<input id="equip-page" />
+					<span class="help">Name of item's page on the wiki. If left blank, same as Name.</span>
+				</div>
+				<div class="entry-row">
+					<label for="equip-icon">Icon:</label>
+					<input id="equip-icon" />
+					<span class="help">Name portion of the icon image file on the wiki. If left blank, same as Name.</span>
+				</div>
+			</div>
+			<div class="entry-row">
+				<label for="equip-desc">Description:</label>
+				<textarea id="equip-desc"></textarea>
+				<span class="help">Item description as shown in-game.</span>
+			</div>
+			<div class="entry-row">
+				<label>Inventory dimensions:</label>
+				<span><input type="number" id="equip-width" /> x <input type="number" id="equip-height" /></span>
+				<span class="help">width x height</span>
+			</div>
+			<div class="entry-row equip-category-changer">
+				<label>Allowed races:</label>
+				<span><label>Human</label> <input type="checkbox" id="equip-human" checked="checked" /></span>
+				<span><label>Elf</label> <input type="checkbox" id="equip-elf" checked="checked" /></span>
+				<span><label>Giant</label> <input type="checkbox" id="equip-giant" checked="checked" /></span>
+				<span class="help">Uncheck any races that cannot use this item.</span>
+			</div>
+			<div class="entry-row equip-category-changer">
+				<label>Allowed genders:</label>
+				<span><label>Male</label> <input type="checkbox" id="equip-male" checked="checked" /></span>
+				<span><label>Female</label> <input type="checkbox" id="equip-female" checked="checked" /></span>
+				<span class="help">Uncheck any genders that cannot use this item.</span>
+			</div>
+			<div class="entry-row">
+				<label for="equip-category">Category:</label>
+				<span class="equip-category">
+					<div>
+						<select id="equip-category-hand" class="tab-hide tab-weapon">
+							<option value="">Pick which hand</option>
+							<option value="righthand">Main hand</option>
+							<option value="twohand">Two handed</option>
+						</select>
+						<select id="equip-category-slot" class="tab-hide tab-equip">
+							<option value="">Pick which slot</option>
+							<option value="equip/lefthand/{lefthand}">Off-hand</option>
+							<option value="equip/armor/{armor}">Body</option>
+							<option value="equip/hand/{glove}">Hand</option>
+							<option value="equip/foot/{foot}">Foot</option>
+							<option value="equip/{robe}">Robe</option>
+							<option value="equip/accessary/{acc-type}">Accessory</option>
+							<option value="deco_equip/action_cloth/tail">Tail</option>
+						</select>
+						<select id="equip-category-type-righthand" class="combobox tab-hide tab-weapon" placeholder="Main hand type">
+							<option value="{cat}/axe/{mat}/?/*/weapontype_combat">Axe</option>
+							<option value="{cat}/blunt/{mat}/?/*/weapontype_combat">Blunt</option>
+							<option value="bottle/?">Bottle</option>
+							<option value="{cat}/bow/{mat}/?">Bow</option>
+							<option value="{cat}/tool/cooking/cooking_?">Cooking tool</option>
+							<option value="{cat}/big_cooking_?/big_cooking_weapon">Large cooking weapon</option>
+							<option value="{cat}/crossbow/{mat}/?">Crossbow</option>
+							<option value="{cat}/inverse_transmutator/no_scale/{mat}/*/cylinder_bag/">Cylinder: Regular</option>
+							<option value="{cat}/inverse_transmutator/sand_burst_cylinder/no_scale/{mat}/*/?_cylinder/cylinder_bag/">Cylinder: Clay</option>
+							<option value="{cat}/inverse_transmutator/flamer_cylinder/no_scale/{mat}/*/?_cylinder/cylinder_bag/">Cylinder: Fire</option>
+							<option value="{cat}/inverse_transmutator/water_cannon_cylinder/no_scale/{mat}/*/?_cylinder/cylinder_bag/">Cylinder: Water</option>
+							<option value="{cat}/inverse_transmutator/wind_blast_cylinder/no_scale/{mat}/*/?_cylinder/cylinder_bag/">Cylinder: Wind</option>
+							<option value="{cat}/cylinder_turret/no_scale/{mat}/need_install/huge_backtool">Cylinder: Turret</option>
+							<option value="dreamcatcher/?_dreamcatcher">Dreamcatcher</option>
+							<option value="tool/{inst-class}/instrument/{mat}/string0?/?">Instrument</option>
+							<option value="{cat}/edged/{mat}/blade/Rapier/?_rapier/*/weapontype_combat">Rapier</option>
+							<option value="{cat}/edged/{mat}/?/*/weapontype_combat">Sword</option>
+							<option value="tool/{rh-tool}">Tool</option>
+							<option value="{cat}/blunt/{mat}/umbrella">Umbrella</option>
+							<option value="{cat}/wand/?/{magic}">Wand</option>
+							<option value="weapon/edged/steel/{land-mover}/l_rod">Wind L-Rod</option>
+							<!-- TODO: Instruments, tools -->
+						</select>
+						<select id="equip-category-type-lefthand" class="combobox tab-hide" placeholder="Off-hand type">
+							<option value="shield/tool/cooking/?">Cooking tool</option>
+							<option value="marionette/?">Marionette</option>
+							<option value="shield/?">Shield</option>
+							<option value="shield/tool/magic_assistance_book">Spell book</option>
+						</select>
+						<select id="equip-category-type-twohand" class="combobox tab-hide" placeholder="Two hand type">
+							<option value="{cat}/atlatl/?">Atlatl</option>
+							<option value="{cat}/axe/{mat}/?/*/weapontype_combat">Axe</option>
+							<option value="{cat}/blunt/{mat}/?/*/weapontype_combat">Blunt</option>
+							<option value="{cat}/gun/dualgun/not_ego/?/heulwen_e_weapon/heulwen">Gun</option>
+							<option value="tool/steel/fishing/fishingrod/weapon">Fishing rod</option>
+							<option value="tool/{inst-class2}/instrument/{mat}">Instrument</option>
+							<option value="{cat}/knuckle/?/giant_knuckle/*/glove_knuckle">Knuckle</option>
+							<option value="blunt/steel/l_rod/equip_usable">L-Rod</option>
+							<option value="{cat}/lance/?/giant_onehand/{mat}/no_scale">Lance</option>
+							<option value="tool/microphone/?">Microphone</option>
+							<option value="{cat}/pillow/no_scale">Pillow</option>
+							<option value="{cat}/scythe/no_scale">Scythe</option>
+							<option value="{cat}/shuriken/?">Shuriken</option>
+							<option value="{cat}/staff/{magic}/?/{bolt-charge}">Staff</option>
+							<option value="{cat}/edged/{mat}/?/*/weapontype_combat">Sword</option>
+							<!-- TODO: Instruments, tools, staves -->
+						</select>
+						<select id="equip-category-hybrid-type" class="combobox tab-hide tab-weapon" placeholder="Hybdridization">
+							<option value="">No hybdridization</option>
+							<option value="blade/weapontype_combat" data-help="Can you sheer sheep?">Blade hybrid</option>
+							<option value="inverse_transmutator/no_scale/{mat}">Cylinder hybrid</option>
+							<option value="l_rod">L-Rod hybrid</option>
+							<option value="staff/{magic}/{bolt-charge}">Staff hybrid</option>
+							<option value="wand/{magic}">Wand hybrid</option>
+						</select>
+						<select id="equip-category-cat" class="equip-category-custom tab-hide">
+							<option value="weapon">Normal weapon</option>
+							<option value="ego_weapon">Spirit weapon</option>
+							<option value="weapon/*/demon_weapon">Fomor weapon</option>
+						</select>
+						<!-- TODO: armor, glove, foot -->
+						<select id="equip-category-robe" class="equip-category-custom tab-hide">
+							<option value="robe/?">Robe</option>
+							<option value="wing">Wings</option>
+						</select>
+						<select id="equip-category-acc-type" class="equip-category-custom tab-hide">
+							<option value="?">Accessory</option>
+							<option value="halo/action_cloth/item_effect">Halo</option>
+							<option value="*/not_partner_feed">Flying Puppet</option>
+							<option value="not_partner_feed/{suppup-expire}/support_puppet">Support Puppet</option>
+						</select>
+						<select id="equip-category-mat" class="equip-category-custom">
+							<option value="">Material is irrelevant to enchanting</option>
+							<option value="steel">Metal</option>
+							<option value="wood">Wood</option>
+							<option value="steel/wood">Metal + Wood</option>
+							<option value="ivory">Ivory</option>
+						</select>
+						<select id="equip-category-inst-class" class="equip-category-custom tab-hide">
+							<option value="string">String instrument</option>
+							<option value="percussion">Percussion instrument</option>
+							<option value="wind">Wind instrument</option>
+							<option value="handbell">Handbell</option>
+						</select>
+						<select id="equip-category-rh-tool" class="equip-category-custom tab-hide">
+							<option value="blacksmith/blunt/steel/hammer/02/weapon/Blacksmith_Hammer">Blacksmith Hammer</option>
+							<option value="camara/Handycam_Set">Camera</option>
+							<option value="heulwen/heulwen_tool/blunt/steel/hammer/02/weapon">Engineering Hammer</option>
+							<option value="handicraft_kit">Handicraft Kit</option>
+							<option value="tailor/kit/kit01">Tailoring Kit</option>
+						</select>
+						<select id="equip-category-land-mover" class="equip-category-custom tab-hide">
+							<option value="snowland_lowering">Lowers land (Snow)</option>
+							<option value="land_lowering">Lowers land (Cold Wind)</option>
+							<option value="land_uppering">Raises land (Warm Wind)</option>
+						</select>
+						<select id="equip-category-bolt-charge" class="equip-category-custom tab-hide">
+							<option value="">Requires 2 bolts per Fire charge, 3 per Ice/Lightning</option>
+							<option value="whitewing/Endlesswing">Requires 2 bolts per Fire/Ice/Lightning charge</option>
+							<option value="no_bolt_stack">Cannot be elementally charged</option>
+							<option value="merlin_knuckle_staff/no_bolt_stack">Can be charged but is not required for int magic.</option>
+						</select>
+						<select id="equip-category-repairable">
+							<option value="not_repairable">Not repairable</option>
+							<option value="cylinder_repairable">Alchemy repairable</option>
+							<option value="smith_repairable">Blacksmith repairable</option>
+							<option value="engineer_repairable">Engineer repairable</option>
+							<option value="magicsmith_repairable">Fleta repairable</option>
+							<option value="demon_repairable">Fomor repairable</option>
+							<option value="magic_school_repairable">Magic repairable</option>
+							<option value="misc_repairable">Misc repairable</option>
+							<option value="">Tailor repairable</option>
+						</select>
+						<select id="equip-category-dyeable">
+							<option value="">Dyeable</option>
+							<option value="not_dyeable/custom_dye_only">Special dyes only</option>
+							<option value="not_dyeable">Not dyeable</option>
+							<option value="fixedcolor_dyeable">Only by Fixed Dyes</option>
+							<option value="not_dyeable_twinkling_color">Only by non-flashing Fixed Dyes</option>
+							<option value="instrument_dyeable">Dyeable with Instrument Spray Paint</option>
+						</select>
+						<span class="checkbox-cluster">
+							<span><label><abbr title="You need an appropriate enchant.">Enchantable?</abbr></label> <input type="checkbox" id="equip-category-enchantable" checked="checked" /></span>
+							<span><label><abbr title="If you can put it in the reforge window it is.">Reforgeable?</abbr></label> <input type="checkbox" id="equip-category-reforgeable" checked="checked" /></span>
+							<span><label><a href="//wiki.mabinogiworld.com/view/Holy_Water_of_Lymilark#Methods_to_Obtain">Blessable</a>?</label> <input type="checkbox" id="equip-category-bless" checked="checked" /></span>
+							<span><label><a href="//wiki.mabinogiworld.com/view/Holy_Flame#Methods_to_Obtain">Holy Flame</a>?</label> <input type="checkbox" id="equip-category-holyfire" checked="checked" /></span>
+							<span><label>Dropable?</label> <input type="checkbox" id="equip-category-dropable" checked="checked" /></span>
+							<span><label><abbr title="Whether or not it shows the Destroy option in the right-click menu">Destroyable?</abbr></label> <input type="checkbox" id="equip-category-destroyable" /></span>
+							<span><label><abbr title="Try equiping a shield with it.">One handed for giants?</abbr></label> <input type="checkbox" id="equip-category-giant_onehand" /></span>
+							<span class="tab-hide tab-weapon"><label>Dual wieldable by humans?</label> <input type="checkbox" id="equip-category-twin_sword" /></span>
+							<span class="tab-hide tab-weapon"><label>Dual wieldable by giants?</label> <input type="checkbox" id="equip-category-twin_club" /></span>
+						</span>
+						<span id="equip-category-magic" class="equip-category-custom checkbox-cluster tab-hide">
+							<span><label>Increases <a href="//wiki.mabinogiworld.com/view/Blaze">Blaze</a> damage?</label> <input type="checkbox" id="equip-category-melee_wand" /></span>
+							<span><label>Can cast <a href="//wiki.mabinogiworld.com/view/Party_Heal">Party Heal</a>?</label> <input type="checkbox" id="equip-category-party_healing" /></span>
+							<span><label>Autoswaps to this weapon when using <a href="//wiki.mabinogiworld.com/view/Party_Heal">Party Heal</a>?</label> <input type="checkbox" id="equip-category-healing_wand" /></span>
+							<span><label>Can cast <a href="//wiki.mabinogiworld.com/view/Fireball">Fireball</a>?</label> <input type="checkbox" id="equip-category-fire_wand" /></span>
+							<span><label>Can cast <a href="//wiki.mabinogiworld.com/view/Ice_Spear">Ice Spear</a>?</label> <input type="checkbox" id="equip-category-ice_wand" /></span>
+							<span><label>Can cast <a href="//wiki.mabinogiworld.com/view/Thunder">Thunder</a>?</label> <input type="checkbox" id="equip-category-lightning_wand" /></span>
+						</span>
+					</div>
+					<div><input id="equip-category" /></div>
+				</span>
+				<span class="help">Item category string.</span>
+			</div>
+			<div class="entry-section equip-tradability checkbox-cluster">
+				<h4>Tradability</h4>
+				<span><label><abbr title="You would need to actually sell it to know.">Sellable to NPCs?</abbr></label> <input type="checkbox" id="equip-sellable-npc" checked="checked" /></span>
+				<span><label><abbr title="Listing it for a price is sufficient.">Sellable in a personal shop?</abbr></label> <input type="checkbox" id="equip-sellable-player" checked="checked" /></span>
+				<span><label><abbr title="Putting it in a trade window is sufficient.">Tradable?</abbr></label> <input type="checkbox" id="equip-tradable" checked="checked" /></span>
+				<span><label><abbr title="Have to drop it and have someone pick it up.">Picked up by others?</abbr></label> <input type="checkbox" id="equip-otherpick" checked="checked" /></span>
+				<span><label>Storable on pets?</label> <input type="checkbox" id="equip-storeonpets" checked="checked" /></span>
+				<span><label>Bankable?</label> <input type="checkbox" id="equip-bankable" checked="checked" /></span>
+				<span><label><abbr title="If it can be stored in another char's bank tab it works.">Others can withdraw it?</abbr></label> <input type="checkbox" id="equip-withdrawable" checked="checked" /></span>
+			</div>
+			<div class="entry-row equip-speed tab-hide tab-weapon">
+				<label>Speed:</label>
+				<span>
+					<select id="equip-speed">
+						<option value="0">Very Fast</option>
+						<option value="1">Fast</option>
+						<option value="2">Normal</option>
+						<option value="3">Slow</option>
+						<option value="4">Very Slow</option>
+					</select>
+					<input id="equip-speed-raw" type="hidden" />
+					<input type="number" id="equip-hits" />
+					<span>Hit Weapon</span>
+				</span>
+				<span class="help">Speed + number of hits shown in game</span>
+			</div>
+			<div class="entry-section">
+				<h4>Stats</h4>
+				<div class="entry-row tab-hide tab-weapon">
+					<label>Attack:</label>
+					<span><input type="number" id="equip-min-damage" /> ~ <input type="number" id="equip-max-damage" /></span>
+					<span class="help">Base weapon damage, min ~ max</span>
+				</div>
+				<div class="entry-row tab-hide tab-weapon">
+					<label>Injury:</label>
+					<span><input type="number" id="equip-min-injury" /> ~ <input type="number" id="equip-max-injury" /></span>
+					<span class="help">Base weapon injury, min ~ max</span>
+				</div>
+				<div class="entry-row tab-hide tab-weapon">
+					<label for="equip-critical">Critical:</label>
+					<input type="number" id="equip-critical" />
+					<span class="help">Base critical % on the weapon, no need to write the %</span>
+				</div>
+				<div class="entry-row tab-hide tab-weapon">
+					<label for="equip-balance">Balance:</label>
+					<input type="number" id="equip-balance" />
+					<span class="help">Base weapon balance, no need to write the %</span>
+				</div>
+				<div class="entry-row">
+					<label for="equip-defense">Defense:</label>
+					<input type="number" id="equip-defense" />
+					<span class="help tab-hide tab-equip">Base defense</span>
+					<span class="help tab-hide tab-weapon">Bonus defense</span>
+				</div>
+				<div class="entry-row tab-hide tab-equip">
+					<label for="equip-protection">Protection:</label>
+					<input type="number" id="equip-protection" />
+					<span class="help">Base protection</span>
+				</div>
+				<div class="entry-row tab-hide tab-equip">
+					<label for="equip-magic-defense">Magic Defense:</label>
+					<input type="number" id="equip-magic-defense" />
+					<span class="help">Base magic defense</span>
+				</div>
+				<div class="entry-row tab-hide tab-equip">
+					<label for="equip-magic-protection">Magic Protection:</label>
+					<input type="number" id="equip-magic-protection" />
+					<span class="help">Base magic protection</span>
+				</div>
+				<div class="entry-row">
+					<label for="equip-durability">Durability:</label>
+					<input type="number" id="equip-durability" />
+					<span class="help">Base weapon durability</span>
+				</div>
+				<div class="entry-row equip-range tab-hide">
+					<label for="equip-range">Range:</label>
+					<input type="number" id="equip-range" />
+					<span class="help">Base weapon range</span>
+				</div>
+			</div>
+			<div class="entry-section">
+				<h4>Upgrades</h4>
+				<div class="entry-row">
+					<label for="equip-upgrades">Upgrades</label>
+					<input type="number" id="equip-upgrades" />
+					<label for="equip-gem-upgrades">Gem upgrades</label>
+					<input type="number" id="equip-gem-upgrades" />
+					<span class="help">Number of regular and gem upgrades.</span>
+				</div>
+				<div class="entry-row tab-hide tab-weapon">
+					<label for="equip-spupable">Can special upgrade?</label>
+					<input type="checkbox" id="equip-spupable" />
+					<label for="equip-spirit">Can make a spirit weapon?</label>
+					<input type="checkbox" id="equip-spirit" />
+					<span></span>
+				</div>
+			</div>
+			<div class="entry-section">
+				<h4>Set bonus</h4>
+				<div class="entry-row equip-set-bonus" id="equip-set-bonus">
+					<select class="equip-bonus combobox" placeholder="Select bonus">
+						<option value="poison_immune">Poison Immunity</option>
+						<option value="stone_immune">Petrification Immunity</option>
+						<option value="fast_attack">Attack Speed Increase</option>
+						<option value="mana_saving">Mana Usage Reduction</option>
+						<option value="stamina_saving">Stamina Usage Reduction</option>
+						<option value="bombexpert">Explosion Defense</option>
+						<option value="stompdefence">Stomp Defense</option>
+						<option value="mana_wasting">Mana Usage Increase</option>
+						<option value="stamina_wasting">Stamina Usage Increase</option>
+						<option value="demigod">Demigod Enhancement</option>
+						<option value="smash_enhance">Smash Enhancement</option>
+						<option value="assaultslash_enhance">Assault Slash Enhancement</option>
+						<option value="assault_enhance">Charge Enhancement</option>
+						<option value="icebolt_enhance">Icebolt Enhancement</option>
+						<option value="firebolt_enhance">Firebolt Enhancement</option>
+						<option value="healing_enhance">Healing Enhancement</option>
+						<option value="flamer_enhance">Flame Burst Enhancement</option>
+						<option value="watercannon_enhance">Water Cannon Enhancement</option>
+						<option value="lifedrain_enhance">Life Drain Enhancement</option>
+						<option value="magnumshot_enhance">Magnum Shot Enhancement</option>
+						<option value="supportshot_enhance">Support Shot Enhancement</option>
+						<option value="fishing_enhance">Fishing Enhancement</option>
+						<option value="refine_enhance">Refining Enhancement</option>
+						<option value="blacksmith_enhance">Blacksmith Enhancement</option>
+						<option value="metallurgy_enhance">Metallurgy Enhancement</option>
+						<option value="goldstrike_enhance">Gold Strike Enhancement</option>
+						<option value="ShapeShiftEnhance">Increased chance of obtaining transformation information.</option>
+						<option value="windmill_enhance">Windmill Enhancement</option>
+						<option value="dodge_enhance">Absorption Enhancement</option>
+						<option value="QuestExpEnhance">Quest Experience Enhancement</option>
+						<option value="DownAttackEnhance">Assault Slash Enhancement</option>
+						<option value="commerce_speedup">Transport Speed</option>
+						<option value="CookingExpEnhance">Cooking Production EXP Boost</option>
+						<option value="OverlapSpeedUp">Move Speed Increase</option>
+						<option value="Perfect_Playing">This effect prevents you from going off-key</option>
+						<option value="ShadowMissionExpEnhance">Shadow Mission EXP boost</option>
+						<option value="Aquarius">Aquarius Sign Effect</option>
+						<option value="Pisces">Pisces Sign Effect</option>
+						<option value="Aries">Aries Sign Effect</option>
+						<option value="Taurus">Taurus Sign Effect</option>
+						<option value="Gemini">Gemini Sign Effect</option>
+						<option value="Cancer">Cancer Sign Effect</option>
+						<option value="Leo">Leo Sign Effect</option>
+						<option value="Virgo">Virgo Sign Effect</option>
+						<option value="Libra">Libra Sign Effect</option>
+						<option value="Scorpius">Scorpio Sign Effect</option>
+						<option value="Sagittarius">Sagittarius Sign Effect</option>
+						<option value="Capricorn">Capricorn Sign Effect</option>
+						<option value="CriticalDamageUp">Increases critical damage</option>
+						<option value="BashEnhance">Enhanced Bash</option>
+						<option value="DurabilityLossDecrease">Decrease durability loss</option>
+						<option value="JudgementBlade_Enhance">Judgment Blade Enhancement</option>
+						<option value="LanceCharge_enhance">Lance Charge Enhancement</option>
+						<option value="SpeedUpPlus">Increases Speed</option>
+						<option value="AttackDelay">Increases Attack Delay</option>
+						<option value="MaxDamagePlus">Increases Max Damage</option>
+						<option value="MagicAttackPlus">Increases Magic ATT</option>
+						<option value="ManaConsumeCustom">MP Consumption Decrease</option>
+						<option value="StaminaConsumeCustom">Stamina Consumption Decrease</option>
+						<option value="CriticalDamageCustom">Critical Increase</option>
+						<option value="ExploreExpEnhance2">Exploration EXP Bonus</option>
+					</select>
+					<label>+</label>
+					<input type="number" class="equip-minbonus" />
+					<label>~</label>
+					<input type="number" class="equip-maxbonus" />
+					<span class="action" id="equip-add-another-setbonus">+</span>
+					<span class="help">List of set bonuses granted by the item. Duplicate entries represent bonuses granted by crafting the item with a high enough quality.</span>
+				</div>
+			</div>
+			<div class="entry-section">
+				<h4>Special properties</h4>
+				<div id="equip-category-suppup-expire" class="entry-section equip-category-custom tab-hide">
+					<h4>Support Puppet</h4>
+					<div>
+						<label for="equip-suppup-daily_expire">Daily time limit of</label>
+						<input type="number" id="equip-suppup-daily_expire" />
+						<label for="equip-suppup-daily_expire">minutes.</label>
+					</div>
+					<div class="checkbox-cluster"><!-- TODO: Yui options --></div>
+				</div>
+				<div class="entry-row">
+					<label for="equip-properties">Extra:</label>
+					<textarea id="equip-properties"></textarea>
+					<span class="help">One property per line of the form <b><u>property</u>=<u>value</u></b>.</span>
+				</div>
+				<!-- TODO: Actual properties we use -->
+			</div>
+			<div class="hidden-rows">
+				<span class="hidden-text action">Repair cost overrides.</span>
+				<div class="entry-section equip-repairs">
+					<h4>Repair cost per point</h4>
+					<span class="demon_repairable smith_repairable misc_repairable engineer_repairable">
+						<label>90%</label> <input type="number" id="equip-repair-90" />
+					</span>
+					<span class="cylinder_repairable">
+						<label>91%</label> <input type="number" id="equip-repair-91" />
+					</span>
+					<span class="magic_school_repairable misc_repairable engineer_repairable">
+						<label>92%</label> <input type="number" id="equip-repair-92" />
+					</span>
+					<span class="smith_repairable magic_school_repairable misc_repairable">
+						<label>93%</label> <input type="number" id="equip-repair-93" />
+					</span>
+					<span class="magicsmith_repairable tailor_repairable">
+						<label>94%</label> <input type="number" id="equip-repair-94" />
+					</span>
+					<span class="demon_repairable smith_repairable magic_school_repairable misc_repairable cylinder_repairable magicsmith_repairable tailor_repairable">
+						<label>95%</label> <input type="number" id="equip-repair-95" />
+					</span>
+					<span class="smith_repairable misc_repairable magicsmith_repairable tailor_repairable">
+						<label>96%</label> <input type="number" id="equip-repair-96" />
+					</span>
+					<span class="smith_repairable magic_school_repairable misc_repairable cylinder_repairable magicsmith_repairable tailor_repairable">
+						<label>97%</label> <input type="number" id="equip-repair-97" />
+					</span>
+					<span class="demon_repairable smith_repairable magic_school_repairable misc_repairable magicsmith_repairable engineer_repairable tailor_repairable">
+						<label>98%</label> <input type="number" id="equip-repair-98" />
+					</span>
+					<span class="misc_repairable tailor_repairable">
+						<label>99%</label> <input type="number" id="equip-repair-99" />
+					</span>
+					<span class="demon_repairable smith_repairable magic_school_repairable misc_repairable cylinder_repairable magicsmith_repairable engineer_repairable tailor_repairable">
+						<label>100%</label> <input type="number" id="equip-repair-100" />
+					</span>
+				</div>
+			</div>
+			<div class="entry-section equip-dyeing">
+				<h4>Dyeing</h4>
+				<div class="entry-row">
+					<label>Part A</label>
+					<span class="entry-row-wrapping">
+						<label><input type="radio" name="color1" value="0" checked="checked" /><span>None</span></label>
+						<label><input type="radio" name="color1" value="1" /><img title="Cloth" src="//wiki.mabinogiworld.com/images/c/c8/Cloth_Dye_Palette.png" /></label>
+						<label><input type="radio" name="color1" value="2" /><img title="Leather" src="//wiki.mabinogiworld.com/images/b/bf/Leather_Dye_Palette.png" /></label>
+						<label><input type="radio" name="color1" value="3" /><img title="Pixie" src="//wiki.mabinogiworld.com/images/e/e3/Pixiepalette.png" /></label>
+						<label><input type="radio" name="color1" value="4" /><img title="Nylon" src="//wiki.mabinogiworld.com/images/4/4d/Nylonpalette.png" /></label>
+						<label><input type="radio" name="color1" value="5" /><img title="Armor Metal" src="//wiki.mabinogiworld.com/images/8/84/Armorpalette.png" /></label>
+						<label><input type="radio" name="color1" value="23" /><img title="Weapon Metal" src="//wiki.mabinogiworld.com/images/6/6a/Weaponpalette.png" /></label>
+						<label><input type="radio" name="color1" value="24" /><img title="Hilt Metal" src="//wiki.mabinogiworld.com/images/b/b4/Hiltpalette.png" /></label>
+						<label><input type="radio" name="color1" value="33" /><img title="Winter Lights" src="//wiki.mabinogiworld.com/images/c/c7/Winter_light_palette.png" /></label>
+						<label><input type="radio" name="color1" value="35" /><img title="Sprinkles" src="//wiki.mabinogiworld.com/images/2/25/Sprinkles_dye_palette.PNG" /></label>
+						<label><input type="radio" name="color1" value="58" /><img title="Panda" src="//wiki.mabinogiworld.com/images/d/d1/Panda_Dye_Palette.png" /></label>
+						<label><input type="radio" name="color1" value="61" /><img title="Unknown" src="//wiki.mabinogiworld.com/images/f/fb/Unknown_dye_palette.png" /></label>
+						<label><input type="radio" name="color1" value="62" /><img title="Fur" src="//wiki.mabinogiworld.com/images/5/59/Fur_Palette.png" /></label>
+						<label><input type="radio" name="color1" value="65" /><img title="Giant" src="//wiki.mabinogiworld.com/images/8/8d/Giantpalette.jpg" /></label>
+					</span>
+					<span class="help">Select the most appropriate-looking palette when trying to dye this part with a normal dye.</span>
+				</div>
+				<div class="entry-row">
+					<label>Part B</label>
+					<span class="entry-row-wrapping">
+						<label><input type="radio" name="color2" value="0" checked="checked" /><span>None</span></label>
+						<label><input type="radio" name="color2" value="1" /><img title="Cloth" src="//wiki.mabinogiworld.com/images/c/c8/Cloth_Dye_Palette.png" /></label>
+						<label><input type="radio" name="color2" value="2" /><img title="Leather" src="//wiki.mabinogiworld.com/images/b/bf/Leather_Dye_Palette.png" /></label>
+						<label><input type="radio" name="color2" value="3" /><img title="Pixie" src="//wiki.mabinogiworld.com/images/e/e3/Pixiepalette.png" /></label>
+						<label><input type="radio" name="color2" value="4" /><img title="Nylon" src="//wiki.mabinogiworld.com/images/4/4d/Nylonpalette.png" /></label>
+						<label><input type="radio" name="color2" value="5" /><img title="Armor Metal" src="//wiki.mabinogiworld.com/images/8/84/Armorpalette.png" /></label>
+						<label><input type="radio" name="color2" value="23" /><img title="Weapon Metal" src="//wiki.mabinogiworld.com/images/6/6a/Weaponpalette.png" /></label>
+						<label><input type="radio" name="color2" value="24" /><img title="Hilt Metal" src="//wiki.mabinogiworld.com/images/b/b4/Hiltpalette.png" /></label>
+						<label><input type="radio" name="color2" value="33" /><img title="Winter Lights" src="//wiki.mabinogiworld.com/images/c/c7/Winter_light_palette.png" /></label>
+						<label><input type="radio" name="color2" value="35" /><img title="Sprinkles" src="//wiki.mabinogiworld.com/images/2/25/Sprinkles_dye_palette.PNG" /></label>
+						<label><input type="radio" name="color2" value="58" /><img title="Panda" src="//wiki.mabinogiworld.com/images/d/d1/Panda_Dye_Palette.png" /></label>
+						<label><input type="radio" name="color2" value="61" /><img title="Unknown" src="//wiki.mabinogiworld.com/images/f/fb/Unknown_dye_palette.png" /></label>
+						<label><input type="radio" name="color2" value="62" /><img title="Fur" src="//wiki.mabinogiworld.com/images/5/59/Fur_Palette.png" /></label>
+						<label><input type="radio" name="color2" value="65" /><img title="Giant" src="//wiki.mabinogiworld.com/images/8/8d/Giantpalette.jpg" /></label>
+					</span>
+					<span class="help">Select the most appropriate-looking palette when trying to dye this part with a normal dye.</span>
+				</div>
+				<div class="entry-row">
+					<label>Part C</label>
+					<span class="entry-row-wrapping">
+						<label><input type="radio" name="color3" value="0" checked="checked" /><span>None</span></label>
+						<label><input type="radio" name="color3" value="1" /><img title="Cloth" src="//wiki.mabinogiworld.com/images/c/c8/Cloth_Dye_Palette.png" /></label>
+						<label><input type="radio" name="color3" value="2" /><img title="Leather" src="//wiki.mabinogiworld.com/images/b/bf/Leather_Dye_Palette.png" /></label>
+						<label><input type="radio" name="color3" value="3" /><img title="Pixie" src="//wiki.mabinogiworld.com/images/e/e3/Pixiepalette.png" /></label>
+						<label><input type="radio" name="color3" value="4" /><img title="Nylon" src="//wiki.mabinogiworld.com/images/4/4d/Nylonpalette.png" /></label>
+						<label><input type="radio" name="color3" value="5" /><img title="Armor Metal" src="//wiki.mabinogiworld.com/images/8/84/Armorpalette.png" /></label>
+						<label><input type="radio" name="color3" value="23" /><img title="Weapon Metal" src="//wiki.mabinogiworld.com/images/6/6a/Weaponpalette.png" /></label>
+						<label><input type="radio" name="color3" value="24" /><img title="Hilt Metal" src="//wiki.mabinogiworld.com/images/b/b4/Hiltpalette.png" /></label>
+						<label><input type="radio" name="color3" value="33" /><img title="Winter Lights" src="//wiki.mabinogiworld.com/images/c/c7/Winter_light_palette.png" /></label>
+						<label><input type="radio" name="color3" value="35" /><img title="Sprinkles" src="//wiki.mabinogiworld.com/images/2/25/Sprinkles_dye_palette.PNG" /></label>
+						<label><input type="radio" name="color3" value="58" /><img title="Panda" src="//wiki.mabinogiworld.com/images/d/d1/Panda_Dye_Palette.png" /></label>
+						<label><input type="radio" name="color3" value="61" /><img title="Unknown" src="//wiki.mabinogiworld.com/images/f/fb/Unknown_dye_palette.png" /></label>
+						<label><input type="radio" name="color3" value="62" /><img title="Fur" src="//wiki.mabinogiworld.com/images/5/59/Fur_Palette.png" /></label>
+						<label><input type="radio" name="color3" value="65" /><img title="Giant" src="//wiki.mabinogiworld.com/images/8/8d/Giantpalette.jpg" /></label>
+					</span>
+					<span class="help">Select the most appropriate-looking palette when trying to dye this part with a normal dye.</span>
+				</div>
+			</div>
+			<div class="entry-row equip-market">
+				<label>Internal NPC market values:</label>
+				<span>
+					<label for="equip-buyprice">Value to an NPC</label>
+					<input type="number" id="equip-buyprice" />
+				</span>
+				<span class="equip-sellprice">
+					<label for="equip-sellprice">Fixed price an NPC buys it for</label>
+					<input type="number" id="equip-sellprice" />
+				</span>
+				<span id="equip-predictedsale"></span>
+				<span class="help">Buying price is for an item that has the base maximum durability and is fully repaired.</span>
+			</div>
+			<div class="entry-row equip-resell">
+				<label>Price an NPC buys it for:</label>
+				<input type="number" id="equip-resell" />
+				<span class="help">Buying price is for an item that has the base maximum durability, is fully repaired, and was not bought at a discounted rate.</span>
+			</div>
+			<div class="entry-row">
+				<label>Obtained from:</label>
+				<textarea id="equip-obtain"></textarea>
+				<span class="help">Places other than NPC shops, such as drops. One entry per line. Wiki formatting is acceptible.</span>
+			</div>
+			<div class="entry-row equip-seller-list" id="equip-seller-list">
+				<label>Sold by:</label>
+				<textarea class="equip-sellers"></textarea>
+				<label>for</label>
+				<input type="number" class="equip-saleprice" />
+				<select class="equip-salecurrency">
+					<option value="G">Gold</option>
+					<option value="D">Ducats</option>
+					<option value="P">Pons</option>
+					<option value="RS">Rafting Stars</option>
+					<option value="JS">Jousting Stars</option>
+					<option value="DL1">Royal Court Food Delivery List 1</option>
+					<option value="DL2">Royal Court Food Delivery List 2</option>
+					<option value="DL3">Royal Court Food Delivery List 3</option>
+				</select>
+				<span class="action" id="equip-add-another-saleprice">+</span>
+				<span class="help">List of NPCs who sell this item. One entry per line.</span>
+			</div>
+			<div class="entry-row">
+				<label>Extra information:</label>
+				<textarea id="equip-information"></textarea>
+				<span class="help">One entry per line. Wiki formatting is acceptible.</span>
+			</div>
+		</div>
+	</div>
+	<div class="output">
+		<label for="output">Output:</label>
+		<textarea id="output"></textarea>
+	</div>
+</body>
+</html>
