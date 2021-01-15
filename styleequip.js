@@ -502,7 +502,10 @@ function updateEquipForm() {
 		setXmlDye("color1", "App_Color1");
 		setXmlDye("color2", "App_Color2");
 		setXmlDye("color3", "App_Color3");
-
+		setXmlDye("color4", "App_Color5");
+		setXmlDye("color5", "App_Color6");
+		setXmlDye("color6", "App_Color7");
+		
 		// Market
 		$(".equip-market").show();
 		set("#equip-buyprice", "Price_Buy").change();
@@ -653,7 +656,10 @@ function updateEquipForm() {
 		setDye("color1", get("Color1"));
 		setDye("color2", get("Color2"));
 		setDye("color3", get("Color3"));
-
+		setDye("color4", get("Color4"));
+		setDye("color5", get("Color5"));
+		setDye("color6", get("Color6"));
+		
 		// Can*
 		setTrue("#equip-category-reforgeable", "CanReforge", "False");
 		setTrue("#equip-category-enchantable", "CanEnchant", "False");
@@ -1135,6 +1141,9 @@ function updateEquipOutput() {
 		"Color1=" + $(".equip-dyeing [name='color1']:checked").val(),
 		"Color2=" + $(".equip-dyeing [name='color2']:checked").val(),
 		"Color3=" + $(".equip-dyeing [name='color3']:checked").val(),
+		"Color4=" + $(".equip-dyeing [name='color4']:checked").val(),
+		"Color5=" + $(".equip-dyeing [name='color5']:checked").val(),
+		"Color6=" + $(".equip-dyeing [name='color6']:checked").val(),
 	], "\n");
 
 	// Can*
